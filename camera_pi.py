@@ -10,7 +10,6 @@ from emailer import Emailer
 import cv2
 import numpy as np
 import RPi.GPIO as GPIO
-from autofocus import run_autofocus
 
 
 RELAY_PIN = 22

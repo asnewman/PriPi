@@ -10,6 +10,20 @@ from flask import Flask, render_template, Response, request, jsonify, make_respo
 
 from camera_pi import Camera
 
+# ----- Button activator code -----
+import RPi.GPIO as GPIO
+import requests
+
+def request_camera():
+    print('button pressed')
+    requests.get("http://localhost:5000/video_feed")
+
+GPIO.setwarnings(False) # Ignore warning for now
+GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
+GPIO.setup(36, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 36 to be an input pin and set initial value to be pulled low (off)
+GPIO.add_event_detect(36,GPIO.RISING,callback=request_camera) # Setup event on pin 36 rising edge
+# --------------------------------
+
 app = Flask(__name__)
 
 
@@ -48,4 +62,7 @@ def get_wifi():
         return jsonify(data=ssids)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', threaded=True)
+    try:
+        app.run(host='0.0.0.0', threaded=True)
+    finally:
+        GPIO.cleanup() # Clean up

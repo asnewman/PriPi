@@ -3,12 +3,12 @@
 trap ctrl_c INT
 
 function ctrl_c() {
-  echo "Quiting ADD Video"
-  kill -9 `cat button_activator_pid.txt`
-  rm button_activator_pid.txt
+  echo "Quiting ngrok"
+  kill -9 `cat ngrok_pid.txt`
+  rm ngrok_pid.txt
 }
 
+nohup ./ngrok http --region=eu --hostname=addvideo.eu.ngrok.io 5000 > ngrok.log 2>&1 &
+echo $! > ngrok_pid.txt
 source ./venv/bin/activate
-nohup python button_activator.py > button_activator.log 2>&1 &
-echo $! > button_activator_pid.txt
 python app.py
