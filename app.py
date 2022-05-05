@@ -18,10 +18,13 @@ def request_camera():
     print('button pressed')
     requests.get("http://localhost:5000/video_feed")
 
+def request_camera_cb(pin):
+    request_camera()
+
 GPIO.setwarnings(False) # Ignore warning for now
 GPIO.setmode(GPIO.BOARD) # Use physical pin numbering
 GPIO.setup(36, GPIO.IN, pull_up_down=GPIO.PUD_DOWN) # Set pin 36 to be an input pin and set initial value to be pulled low (off)
-GPIO.add_event_detect(36,GPIO.RISING,callback=request_camera) # Setup event on pin 36 rising edge
+GPIO.add_event_detect(36,GPIO.RISING,callback=request_camera_cb) # Setup event on pin 36 rising edge
 # --------------------------------
 
 app = Flask(__name__)
